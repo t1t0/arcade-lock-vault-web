@@ -1,36 +1,236 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Arcade Lock Vault (Frontend Web)
 
-## Getting Started
+Una aplicación web self-hosted para organizar y gestionar las contraseñas de sitios web de equipos en un entorno seguro y amigable. Esta aplicación permite a los equipos almacenar, organizar y compartir credenciales de manera segura, facilitando la colaboración mientras mantiene altos estándares de seguridad.
 
-First, run the development server:
+## Características
+
+- 🔐 Gestión segura de contraseñas para equipos
+- 🌐 Aplicación web self-hosted
+- 👥 Colaboración en equipo
+- 🔒 Entorno seguro y cifrado
+- 🎨 Interfaz amigable e intuitiva
+- ⚡ Construida con Next.js para rendimiento óptimo
+
+## Tecnologías
+
+Este proyecto está construido con:
+- [Next.js](https://nextjs.org) - Framework de React
+- TypeScript - Para tipado estático
+- Tailwind CSS - Para estilos
+
+## Requisitos Previos
+
+Antes de comenzar, asegúrate de tener instalado:
+- Node.js (versión 18 o superior)
+- npm, yarn, pnpm o bun
+
+## Instalación y Configuración
+
+### 1. Clonar el repositorio
+
+```bash
+git clone <url-del-repositorio>
+cd arcade-lock-vault-web
+```
+
+### 2. Instalar dependencias
+
+```bash
+npm install
+# o
+yarn install
+# o
+pnpm install
+# o
+bun install
+```
+
+### 3. Configurar variables de entorno
+
+Crea un archivo `.env.local` en la raíz del proyecto:
+
+```bash
+cp .env.example .env.local
+```
+
+Edita el archivo `.env.local` con tus configuraciones:
+
+```env
+# Base de datos
+DATABASE_URL="your-database-url"
+
+# Autenticación
+NEXTAUTH_SECRET="your-nextauth-secret"
+NEXTAUTH_URL="http://localhost:3000"
+
+# Cifrado
+ENCRYPTION_KEY="your-encryption-key"
+
+# Otras configuraciones...
+```
+
+## Desarrollo
+
+### Ejecutar el servidor de desarrollo
 
 ```bash
 npm run dev
-# or
+# o
 yarn dev
-# or
+# o
 pnpm dev
-# or
+# o
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver la aplicación.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+La página se actualiza automáticamente cuando editas los archivos.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Comandos útiles para desarrollo
 
-## Learn More
+```bash
+# Ejecutar tests
+npm run test
 
-To learn more about Next.js, take a look at the following resources:
+# Ejecutar linter
+npm run lint
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Formatear código
+npm run format
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Verificar tipos de TypeScript
+npm run type-check
+```
 
-## Deploy on Vercel
+## Producción
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Preparar para producción
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### 1. Configurar variables de entorno de producción
+
+Crea un archivo `.env.production` o configura las variables de entorno en tu servidor:
+
+```env
+# Base de datos de producción
+DATABASE_URL="your-production-database-url"
+
+# URL de producción
+NEXTAUTH_URL="https://tu-dominio.com"
+
+# Claves de cifrado seguras
+ENCRYPTION_KEY="your-secure-production-encryption-key"
+NEXTAUTH_SECRET="your-secure-production-nextauth-secret"
+```
+
+#### 2. Construir la aplicación
+
+```bash
+npm run build
+```
+
+#### 3. Ejecutar en producción
+
+```bash
+npm start
+```
+
+### Despliegue con Docker
+
+#### Crear imagen Docker
+
+```bash
+# Construir la imagen
+docker build -t arcade-lock-vault .
+
+# Ejecutar el contenedor
+docker run -p 3000:3000 --env-file .env.production arcade-lock-vault
+```
+
+#### Docker Compose
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.production
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: arcade_vault
+      POSTGRES_USER: vault_user
+      POSTGRES_PASSWORD: secure_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+```
+
+Ejecutar con Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+### Despliegue en Vercel
+
+1. Conecta tu repositorio a [Vercel](https://vercel.com)
+2. Configura las variables de entorno en el dashboard de Vercel
+3. Despliega automáticamente con cada push a la rama principal
+
+### Despliegue en otros proveedores
+
+- **Railway**: Conecta tu repositorio y configura las variables de entorno
+- **Heroku**: Usa el buildpack de Node.js y configura las variables de entorno
+- **DigitalOcean App Platform**: Conecta tu repositorio y configura las variables
+
+## Configuración de Seguridad
+
+### Recomendaciones importantes:
+
+1. **Claves de cifrado**: Usa claves fuertes y únicas para producción
+2. **HTTPS**: Siempre usa HTTPS en producción
+3. **Base de datos**: Configura tu base de datos con credenciales seguras
+4. **Backups**: Implementa backups regulares de la base de datos
+5. **Actualizaciones**: Mantén las dependencias actualizadas
+
+### Variables de entorno críticas:
+
+- `ENCRYPTION_KEY`: Clave para cifrar las contraseñas almacenadas
+- `NEXTAUTH_SECRET`: Secreto para la autenticación
+- `DATABASE_URL`: URL de conexión a la base de datos
+
+## Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+## Soporte
+
+Si tienes problemas o preguntas:
+
+1. Revisa la documentación
+2. Busca en los issues existentes
+3. Crea un nuevo issue si es necesario
+
+## Recursos Adicionales
+
+- [Documentación de Next.js](https://nextjs.org/docs)
+- [Tutorial interactivo de Next.js](https://nextjs.org/learn)
+- [Repositorio de Next.js en GitHub](https://github.com/vercel/next.js)
